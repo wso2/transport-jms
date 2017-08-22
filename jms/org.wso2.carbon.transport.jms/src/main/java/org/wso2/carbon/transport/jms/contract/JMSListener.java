@@ -16,28 +16,27 @@
  * under the License.
  */
 
-package org.wso2.carbon.transport.jms.exception;
+package org.wso2.carbon.transport.jms.contract;
+
+import org.wso2.carbon.messaging.CarbonMessage;
+import org.wso2.carbon.transport.jms.callback.JMSCallback;
 
 /**
- * Exception that happens in JMS transport level.
+ * Allows to get notifications.
  */
-public class JMSConnectorException extends Exception {
+public interface JMSListener {
     /**
-     * Creates a JMS Connector Exception.
+     * Transport will trigger this method when for each jms message.
      *
-     * @param message Relevant exception message
-     * @param e       Exception object, that has the details of the relevant exception
+     * @param jmsMessage contains the msg data.
+     * @param jmsCallback callback for the message.
      */
-    public JMSConnectorException(String message, Throwable e) {
-        super(message, e);
-    }
+    void onMessage(CarbonMessage jmsMessage, JMSCallback jmsCallback);
 
     /**
-     * Creates a JMS Connector Exception.
+     * If there are errors, transport will trigger this method.
      *
-     * @param message Relevant exception message
+     * @param throwable contains the error details of the event.
      */
-    public JMSConnectorException(String message) {
-        super(message);
-    }
+    void onError(Throwable throwable);
 }

@@ -16,28 +16,27 @@
  * under the License.
  */
 
-package org.wso2.carbon.transport.jms.exception;
+package org.wso2.carbon.transport.jms.contract;
+
+import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 
 /**
- * Exception that happens in JMS transport level.
+ * Inlet of inbound messages
  */
-public class JMSConnectorException extends Exception {
-    /**
-     * Creates a JMS Connector Exception.
-     *
-     * @param message Relevant exception message
-     * @param e       Exception object, that has the details of the relevant exception
-     */
-    public JMSConnectorException(String message, Throwable e) {
-        super(message, e);
-    }
+public interface JMSServerConnector {
 
     /**
-     * Creates a JMS Connector Exception.
+     * Start the server connector which actually starts listening for jms messages.
      *
-     * @param message Relevant exception message
+     * @throws JMSConnectorException if error occurred while starting the server connector.
      */
-    public JMSConnectorException(String message) {
-        super(message);
-    }
+    void start() throws JMSConnectorException;
+
+    /**
+     * Stops the server connector which actually closes the port.
+     *
+     * @return state of action.
+     * @throws JMSConnectorException if error occurred while stopping the server connector.
+     */
+    boolean stop() throws JMSConnectorException;
 }

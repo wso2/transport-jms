@@ -16,28 +16,13 @@
  * under the License.
  */
 
-package org.wso2.carbon.transport.jms.exception;
+package org.wso2.carbon.transport.jms.contract;
+
+import org.wso2.carbon.messaging.CarbonMessage;
 
 /**
- * Exception that happens in JMS transport level.
+ * Represents a jms message.
  */
-public class JMSConnectorException extends Exception {
-    /**
-     * Creates a JMS Connector Exception.
-     *
-     * @param message Relevant exception message
-     * @param e       Exception object, that has the details of the relevant exception
-     */
-    public JMSConnectorException(String message, Throwable e) {
-        super(message, e);
-    }
+public class JMSMessage extends CarbonMessage {
 
-    /**
-     * Creates a JMS Connector Exception.
-     *
-     * @param message Relevant exception message
-     */
-    public JMSConnectorException(String message) {
-        super(message);
-    }
 }
