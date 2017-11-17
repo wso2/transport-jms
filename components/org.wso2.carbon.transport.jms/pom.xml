@@ -46,10 +46,6 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.transport</groupId>
-            <artifactId>org.wso2.carbon.connector.framework</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
@@ -82,6 +78,10 @@
             <groupId>org.atomikos.wso2</groupId>
             <artifactId>atomikos</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -143,9 +143,7 @@
             org.osgi.framework.*;version="${osgi.framework.import.version.range}",
             org.osgi.util.tracker;version="${osgi.service.tracker.import.version.range}",
             org.slf4j.*;version="${slf4j.logging.package.import.version.range}",
-            org.wso2.carbon.messaging.*;version="${carbon.messaging.package.import.version.range}",
-            javax.jms.*;version="${javax.jms.import.version.range}",
-            org.wso2.carbon.connector.framework.*;version="${connector.framework.package.export.version}"
+            javax.jms.*;version="${javax.jms.import.version.range}"
         </import.package>
         <bundle.activator>org.wso2.carbon.transport.jms.internal.JMSConnectorBundleActivator</bundle.activator>
         <carbon.component>

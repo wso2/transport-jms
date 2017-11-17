@@ -20,7 +20,6 @@ package org.wso2.carbon.transport.jms.receiver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wso2.carbon.kernel.utils.StringUtils;
 import org.wso2.carbon.transport.jms.contract.JMSListener;
 import org.wso2.carbon.transport.jms.contract.JMSServerConnector;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
@@ -130,8 +129,7 @@ public class JMSServerConnectorImpl implements JMSServerConnector {
         String connectionFactoryType = connectorConfig.get(JMSConstants.PARAM_CONNECTION_FACTORY_TYPE);
         if (connectionFactoryType != null) {
             if (JMSConstants.DESTINATION_TYPE_TOPIC.equalsIgnoreCase(connectionFactoryType)) {
-                boolean isDurable = !StringUtils.isNullOrEmptyAfterTrim(
-                        connectorConfig.get(JMSConstants.PARAM_SUB_DURABLE));
+                boolean isDurable = Boolean.parseBoolean(connectorConfig.get(JMSConstants.PARAM_SUB_DURABLE));
 
                 if (isDurable && numOfConcurrentConsumers > 1) {
                     // If this is a non durable topic subscription then concurrent consumers should not be allowed
