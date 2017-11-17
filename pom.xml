@@ -44,6 +44,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>javax.jms</groupId>
+                <artifactId>javax.jms-api</artifactId>
+                <version>${javax.jms.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>${equinox.osgi.version}</version>
@@ -54,161 +59,25 @@
                 <version>${equinox.osgi.services.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-buffer</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler-proxy</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http2</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-resolver</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.core</artifactId>
-                <version>${org.wso2.carbon.core.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.orbit.org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${org.snakeyaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.http.netty</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.wso2.carbon.transport</groupId>
                 <artifactId>org.wso2.carbon.connector.framework</artifactId>
-                <version>${project.version}</version>
+                <version>${connector.framework.package.export.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.file</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.email</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.messaging</groupId>
-                <artifactId>org.wso2.carbon.messaging</artifactId>
-                <version>${carbon.messaging.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.orbit.com.lmax</groupId>
-                <artifactId>disruptor</artifactId>
-                <version>${disruptor.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-pool.wso2</groupId>
-                <artifactId>commons-pool</artifactId>
-                <version>${commons.pool.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.websocket</groupId>
-                <artifactId>javax.websocket-api</artifactId>
-                <version>${javax.websocket.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io.wso2</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.wso2.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons.wso2</groupId>
-                <artifactId>commons-vfs2</artifactId>
-                <version>${commons-vfs2.wso2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId>
-                <version>${jsch.version}</version>
-            </dependency>
-
-            <!-- Carbon Metrics Dependency -->
-            <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.http.netty.statistics</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.metrics</groupId>
-                <artifactId>org.wso2.carbon.metrics.core</artifactId>
-                <version>${carbon.metrics.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${org.apache.commons.pool2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockftpserver</groupId>
-                <artifactId>MockFtpServer</artifactId>
-                <version>${mock.ftp.server.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.jms</groupId>
-                <artifactId>javax.jms-api</artifactId>
-                <version>${javax.jms.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -221,21 +90,6 @@
                 <artifactId>activemq-kahadb-store</artifactId>
                 <version>${activemq.broker.vesion}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${org.apache.commons.pool2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.orbit.org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${quartz.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId>
-                <version>${commons-net.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -256,21 +110,9 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>javax.mail</artifactId>
-                <version>${com.sun.mail.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.icegreen</groupId>
-                <artifactId>greenmail</artifactId>
-                <version>${com.icegreen.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>test</scope>
+                <groupId>org.wso2.carbon.transport</groupId>
+                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -351,8 +193,6 @@
         <org.wso2.carbon.core.version>5.1.0</org.wso2.carbon.core.version>
         <carbon.kernel.package.import.version.range>[5.0.0, 6.0.0)</carbon.kernel.package.import.version.range>
 
-        <netty.version>4.1.16.Final</netty.version>
-        <netty.package.import.version.range>[4.0.30, 5.0.0)</netty.package.import.version.range>
         <equinox.osgi.version>3.10.2.v20150203-1939</equinox.osgi.version>
         <equinox.osgi.services.version>3.4.0.v20140312-2051</equinox.osgi.services.version>
         <osgi.framework.import.version.range>[1.8.0, 2.0.0)</osgi.framework.import.version.range>
@@ -395,8 +235,7 @@
 
         <!-- Package exports -->
         <netty.transport.package.export.version>${project.version}</netty.transport.package.export.version>
-        <connector.framework.package.export.version>${project.version}
-        </connector.framework.package.export.version>
+        <connector.framework.package.export.version>6.0.47</connector.framework.package.export.version>
         <jms.transport.package.export.version>${project.version}</jms.transport.package.export.version>
         <email.transport.package.export.version>${project.version}</email.transport.package.export.version>
 
