@@ -24,23 +24,19 @@
     </parent>
     <packaging>pom</packaging>
     <groupId>org.wso2.carbon.transport</groupId>
-    <artifactId>org.wso2.carbon.transport.parent</artifactId>
+    <artifactId>org.wso2.carbon.transport.jms.parent</artifactId>
     <version>6.0.48-SNAPSHOT</version>
-    <name>WSO2 Carbon Transport Parent</name>
+    <name>WSO2 Carbon Transport JMS Parent</name>
 
     <modules>
-        <module>connector-framework</module>
-        <module>http</module>
-        <module>jms</module>
-        <module>file</module>
-        <module>email</module>
-        <module>features</module>
+        <module>components/org.wso2.carbon.transport.jms</module>
+        <module>features/org.wso2.carbon.transport.jms.feature</module>
     </modules>
 
     <scm>
-        <url>https://github.com/wso2/carbon-transports.git</url>
-        <developerConnection>scm:git:https://github.com/wso2/carbon-transports.git</developerConnection>
-        <connection>scm:git:https://github.com/wso2/carbon-transports.git</connection>
+        <url>https://github.com/wso2/transport-jms.git</url>
+        <developerConnection>scm:git:https://github.com/wso2/transport-jms.git</developerConnection>
+        <connection>scm:git:https://github.com/wso2/transport-jms.git</connection>
         <tag>HEAD</tag>
     </scm>
 
