@@ -20,7 +20,6 @@ package org.wso2.carbon.transport.jms.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wso2.carbon.kernel.utils.StringUtils;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 
@@ -90,7 +89,7 @@ public class JMSServerConnectionFactory extends JMSConnectionResourceFactory {
             isSharedSubscription = false;
         }
 
-        isDurable = !StringUtils.isNullOrEmptyAfterTrim(properties.getProperty(JMSConstants.PARAM_DURABLE_SUB_ID));
+        isDurable = Boolean.parseBoolean(properties.getProperty(JMSConstants.PARAM_DURABLE_SUB_ID));
 
         String msgSelector = properties.getProperty(JMSConstants.PARAM_MSG_SELECTOR);
         if (null != msgSelector) {
