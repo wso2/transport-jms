@@ -18,20 +18,20 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>jms-parent</artifactId>
         <groupId>org.wso2.transport.jms</groupId>
+        <artifactId>transport-jms-parent</artifactId>
         <version>6.0.48-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.transport.jms.feature</artifactId>
+    <artifactId>transport-jms-feature</artifactId>
     <name>WSO2 Transport JMS Feature</name>
     <packaging>carbon-feature</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.wso2.transport.jms</groupId>
-            <artifactId>org.wso2.transport.jms</artifactId>
+            <artifactId>transport-jms</artifactId>
         </dependency>
     </dependencies>
 
@@ -59,7 +59,7 @@
                             </adviceFileContents>
                             <bundles>
                                 <bundle>
-                                    <symbolicName>org.wso2.transport.jms</symbolicName>
+                                    <symbolicName>transport-jms</symbolicName>
                                     <version>${project.version}</version>
                                 </bundle>
                             </bundles>

@@ -24,13 +24,13 @@
     </parent>
     <packaging>pom</packaging>
     <groupId>org.wso2.transport.jms</groupId>
-    <artifactId>jms-parent</artifactId>
+    <artifactId>transport-jms-parent</artifactId>
     <version>6.0.48-SNAPSHOT</version>
     <name>WSO2 Transport JMS Parent</name>
 
     <modules>
-        <module>components/org.wso2.transport.jms</module>
-        <module>features/org.wso2.transport.jms.feature</module>
+        <module>components/transport-jms</module>
+        <module>features/transport-jms-feature</module>
     </modules>
 
     <scm>
@@ -111,7 +111,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.transport.jms</groupId>
-                <artifactId>org.wso2.transport.jms</artifactId>
+                <artifactId>transport-jms</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
