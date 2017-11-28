@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.transport.jms</groupId>
         <artifactId>transport-jms-parent</artifactId>
-        <version>6.0.48-SNAPSHOT</version>
+        <version>6.0.48</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
