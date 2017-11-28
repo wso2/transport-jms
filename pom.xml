@@ -23,14 +23,14 @@
         <version>5</version>
     </parent>
     <packaging>pom</packaging>
-    <groupId>org.wso2.carbon.transport</groupId>
-    <artifactId>org.wso2.carbon.transport.jms.parent</artifactId>
+    <groupId>org.wso2.transport.jms</groupId>
+    <artifactId>transport-jms-parent</artifactId>
     <version>6.0.48-SNAPSHOT</version>
-    <name>WSO2 Carbon Transport JMS Parent</name>
+    <name>WSO2 Transport JMS Parent</name>
 
     <modules>
-        <module>components/org.wso2.carbon.transport.jms</module>
-        <module>features/org.wso2.carbon.transport.jms.feature</module>
+        <module>components/transport-jms</module>
+        <module>features/transport-jms-feature</module>
     </modules>
 
     <scm>
@@ -110,8 +110,8 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <groupId>org.wso2.transport.jms</groupId>
+                <artifactId>transport-jms</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -231,13 +231,10 @@
         <org.snakeyaml.package.import.version.range>[1.16.0, 2.0.0)</org.snakeyaml.package.import.version.range>
         <javax.jms.import.version.range>[2.0.1, 3.0.0)</javax.jms.import.version.range>
         <com.sun.mail.import.version.range>[1.5.0, 1.6.0-rc2)</com.sun.mail.import.version.range>
-        <file.transport.package.export.version>${project.version}</file.transport.package.export.version>
 
         <!-- Package exports -->
-        <netty.transport.package.export.version>${project.version}</netty.transport.package.export.version>
         <connector.framework.package.export.version>6.0.47</connector.framework.package.export.version>
         <jms.transport.package.export.version>${project.version}</jms.transport.package.export.version>
-        <email.transport.package.export.version>${project.version}</email.transport.package.export.version>
 
         <!-- Following two properties should be removed once the versions are added the wso2 parent pom CARBON-15729 -->
         <maven.checkstyle.plugin.version>2.17</maven.checkstyle.plugin.version>
@@ -251,13 +248,10 @@
 
         <javax.jms.version>2.0.1</javax.jms.version>
         <jsch.version>0.1.51.wso2v1</jsch.version>
-        <mock.ftp.server.version>2.7.1</mock.ftp.server.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javax.transaction.version>1.2</javax.transaction.version>
         <org.atomikos.wso2.version>3.8.0.wso2v1</org.atomikos.wso2.version>
 
-        <com.icegreen.version>1.5.5</com.icegreen.version>
-        <com.sun.mail.version>1.6.0-rc2</com.sun.mail.version>
     </properties>
 
 </project>
