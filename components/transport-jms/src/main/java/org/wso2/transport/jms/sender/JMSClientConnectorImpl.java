@@ -93,10 +93,20 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
             throw e;
         } catch (JMSException e) {
             throw new JMSConnectorException("JMS Send Failed with [" + e.getMessage() + " ]", e);
-        } catch (Exception e) {
-            throw new JMSConnectorException("Error acquiring the session. " + e.getMessage(), e);
         }
         return true;
+    }
+
+    @Override
+    public Destination createDestination(String destinationName, SessionWrapper sessionWrapper)
+            throws JMSConnectorException {
+        Destination destination;
+        try {
+            destination = jmsConnectionFactory.createDestination(sessionWrapper.getSession(), destinationName);
+        } catch (JMSConnectorException e) {
+            throw e;
+        }
+        return destination;
     }
 
     @Override

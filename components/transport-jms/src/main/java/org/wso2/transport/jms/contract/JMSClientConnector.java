@@ -21,6 +21,7 @@ package org.wso2.transport.jms.contract;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.sender.wrappers.SessionWrapper;
 
+import javax.jms.Destination;
 import javax.jms.Message;
 
 /**
@@ -38,6 +39,16 @@ public interface JMSClientConnector {
      * @throws JMSConnectorException on error while trying to send message to backend.
      */
     boolean send(Message message, String destinationName) throws JMSConnectorException;
+
+    /**
+     * Create a {@link Destination} instance using a {@link javax.jms.Session}.
+     *
+     * @param destinationName Name of the destination
+     * @param sessionWrapper Session object
+     * @return  Created destination object
+     * @throws JMSConnectorException Error when creating a {@link Destination}.
+     */
+    Destination createDestination(String destinationName, SessionWrapper sessionWrapper) throws JMSConnectorException;
 
     /**
      * Create a {@link Message} instance using a {@link javax.jms.Session}.
