@@ -111,6 +111,7 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
                 try {
                     connection = jmsConnectionFactory.createConnection();
                     session = jmsConnectionFactory.createSession(connection);
+                    connection.start();
                     message = receiveMessage(session, destinationName, timeout);
                 } finally {
                     try {
@@ -295,13 +296,13 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
     }
 
     /**
-     * Perform reception of a JMS Message using polling mechanism of JMS API
+     * Perform reception of a JMS Message using polling mechanism of JMS API.
      *
-     * @param session JMS Session instance
-     * @param destinationName Name of the destination
-     * @param timeout blocking timeout value
-     * @return received JMS message (null if nothing returned)
-     * @throws JMSConnectorException errors when creating consumer, receiving the message or releasing the resources
+     * @param session JMS Session instance.
+     * @param destinationName Name of the destination.
+     * @param timeout blocking timeout value.
+     * @return received JMS message (null if nothing returned).
+     * @throws JMSConnectorException errors when creating consumer, receiving the message or releasing the resources.
      */
     private Message receiveMessage(Session session, String destinationName, int timeout) throws JMSConnectorException {
         MessageConsumer consumer = null;

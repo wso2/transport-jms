@@ -54,4 +54,12 @@
         </classes>
     </test>
 
+    <test name="JMS Client Polling">
+        <classes>
+            <class name="org.wso2.transport.jms.test.client.polling.QueueClientPollingTestCase"/>
+            <class name="org.wso2.transport.jms.test.client.polling.QueueNonCachedClientPollingTestCase"/>
+            <class name="org.wso2.transport.jms.test.client.polling.QueueTransactedClientPollingTestCase"/>
+        </classes>
+    </test>
+
 </suite>

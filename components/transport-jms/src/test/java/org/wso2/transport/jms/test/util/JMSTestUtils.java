@@ -21,6 +21,7 @@ package org.wso2.transport.jms.test.util;
 import org.wso2.transport.jms.exception.JMSConnectorException;
 import org.wso2.transport.jms.factory.JMSClientConnectionFactory;
 import org.wso2.transport.jms.sender.JMSClientConnectorImpl;
+import org.wso2.transport.jms.sender.JMSConnectionFactoryManager;
 import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.lang.reflect.Field;
@@ -85,5 +86,6 @@ public class JMSTestUtils {
         JMSClientConnectionFactory connectionFactory = (JMSClientConnectionFactory) field.get(jmsClientConnector);
 
         connectionFactory.closeJMSResources();
+        JMSConnectionFactoryManager.getInstance().removeClientConnectionFactory(connectionFactory.getFactoryId());
     }
 }

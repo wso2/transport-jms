@@ -44,23 +44,23 @@ public interface JMSClientConnector {
      * Method to use to poll messages from a destination with the provided timeout. Polling support included for queues
      * only.
      *
-     * @param destinationName Name of the destination
-     * @param timeout timeout value that will blocked for a message
-     * @return Received Message from the broker (null if nothing received)
-     * @throws JMSConnectorException errors when acquiring session, polling or closing resources
+     * @param destinationName Name of the destination.
+     * @param timeout timeout value that will blocked for a message.
+     * @return Received Message from the broker (null if nothing received).
+     * @throws JMSConnectorException errors when acquiring session, polling or closing resources.
      *
-     * @since Transport-JMS 6.0.49
+     * @since Transport-JMS 6.0.49.
      */
     Message poll(String destinationName, int timeout) throws JMSConnectorException;
 
     /**
      * Create a {@link Destination} instance using a {@link javax.jms.Session}.
      *
-     * @param destinationName Name of the destination
-     * @return  Created destination object
+     * @param destinationName Name of the destination.
+     * @return  Created destination object.
      * @throws JMSConnectorException Error when creating a {@link Destination}.
      *
-     * @since Transport-JMS 6.0.49
+     * @since Transport-JMS 6.0.49.
      */
     Destination createDestination(String destinationName) throws JMSConnectorException;
 
@@ -97,13 +97,13 @@ public interface JMSClientConnector {
      * Poll method for a transacted session. Difference of this from Poll method is that we have tp pass a
      * {@link SessionWrapper} instance as an argument. Polling will be done on that.
      *
-     * @param destinationName Name of the destination
-     * @param timeout timeout value that will blocked for a message
-     * @param sessionWrapper already acquired SessionWrapper instance
-     * @return Received Message from the broker (null if nothing received)
-     * @throws JMSConnectorException errors when polling or closing resources
+     * @param destinationName Name of the destination.
+     * @param timeout timeout value that will blocked for a message.
+     * @param sessionWrapper already acquired SessionWrapper instance.
+     * @return Received Message from the broker (null if nothing received).
+     * @throws JMSConnectorException errors when polling or closing resources.
      *
-     * @since Transport-JMS 6.0.49
+     * @since Transport-JMS 6.0.49.
      */
     Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper)
             throws JMSConnectorException;
