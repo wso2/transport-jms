@@ -31,7 +31,10 @@ import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TopicPublisher;
 
@@ -93,10 +96,91 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
             throw e;
         } catch (JMSException e) {
             throw new JMSConnectorException("JMS Send Failed with [" + e.getMessage() + " ]", e);
-        } catch (Exception e) {
-            throw new JMSConnectorException("Error acquiring the session. " + e.getMessage(), e);
         }
         return true;
+    }
+
+    @Override
+    public Message poll(String destinationName, int timeout) throws JMSConnectorException {
+        SessionWrapper sessionWrapper = null;
+        Message message;
+        try {
+            if (!jmsConnectionFactory.isClientCaching()) {
+                Connection connection = null;
+                Session session = null;
+                try {
+                    connection = jmsConnectionFactory.createConnection();
+                    session = jmsConnectionFactory.createSession(connection);
+                    connection.start();
+                    message = receiveMessage(session, destinationName, timeout);
+                } finally {
+                    try {
+                        jmsConnectionFactory.closeSession(session);
+                        jmsConnectionFactory.closeConnection(connection);
+                    } catch (JMSException e) {
+                        throw new JMSConnectorException("Error closing JMS resources. " + e.getMessage(), e);
+                    }
+                }
+            } else {
+                sessionWrapper = jmsConnectionFactory.getSessionWrapper();
+                message = receiveMessage(sessionWrapper.getSession(), destinationName, timeout);
+            }
+        } catch (JMSConnectorException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new JMSConnectorException("Error getting the session. " + e.getMessage(), e);
+        } finally {
+            if (sessionWrapper != null) {
+                jmsConnectionFactory.returnSessionWrapper(sessionWrapper);
+            }
+        }
+        return message;
+    }
+
+    @Override
+    public Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper)
+            throws JMSConnectorException {
+        return receiveMessage(sessionWrapper.getSession(), destinationName, timeout);
+    }
+
+    @Override
+    public Destination createDestination(String destinationName) throws JMSConnectorException {
+        Destination destination;
+
+        if (jmsConnectionFactory.isClientCaching()) {
+            SessionWrapper sessionWrapper = null;
+            try {
+                sessionWrapper = jmsConnectionFactory.getSessionWrapper();
+                destination = jmsConnectionFactory.createDestination(sessionWrapper.getSession(), destinationName);
+            } catch (JMSConnectorException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new JMSConnectorException("Error acquiring the session. " + e.getMessage(), e);
+            } finally {
+                if (sessionWrapper != null) {
+                    jmsConnectionFactory.returnSessionWrapper(sessionWrapper);
+                }
+            }
+        } else {
+            Connection connection = null;
+            Session session = null;
+
+            try {
+                connection = jmsConnectionFactory.createConnection();
+                session = jmsConnectionFactory.createSession(connection);
+                destination = jmsConnectionFactory.createDestination(session, destinationName);
+            } catch (JMSException e) {
+                throw new JMSConnectorException("Error creating the JMS Destination. " + e.getMessage(), e);
+            } finally {
+                try {
+                    jmsConnectionFactory.closeSession(session);
+                    jmsConnectionFactory.closeConnection(connection);
+                } catch (JMSException e) {
+                    throw new JMSConnectorException("Error releasing the JMS resources. " + e.getMessage(), e);
+                }
+            }
+        }
+        return destination;
     }
 
     @Override
@@ -209,6 +293,44 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
             jmsConnectionFactory.closeSession(session);
             jmsConnectionFactory.closeConnection(connection);
         }
+    }
+
+    /**
+     * Perform reception of a JMS Message using polling mechanism of JMS API.
+     *
+     * @param session JMS Session instance.
+     * @param destinationName Name of the destination.
+     * @param timeout blocking timeout value.
+     * @return received JMS message (null if nothing returned).
+     * @throws JMSConnectorException errors when creating consumer, receiving the message or releasing the resources.
+     */
+    private Message receiveMessage(Session session, String destinationName, int timeout) throws JMSConnectorException {
+        MessageConsumer consumer = null;
+        Message message;
+        Destination queue = jmsConnectionFactory.createDestination(session, destinationName);
+        try {
+            // MessageConsumer is not included inside SessionWrapper because SessionWrapper is destination
+            // independent but MessageConsumer is not. For each Poll call new MessageConsumer will be created.
+            // ClientCaching parameter will control whether we need to create new session and connection when using
+            // JMS Client Connector
+            if (JMSConstants.JMS_SPEC_VERSION_1_0.equals(jmsConnectionFactory.getJmsSpec())) {
+                consumer = ((QueueSession) session).createReceiver((Queue) queue);
+            } else {
+                consumer = session.createConsumer(queue);
+            }
+            message = consumer.receive(timeout);
+        } catch (JMSException e) {
+            throw new JMSConnectorException("Error JMS Client poll. " + e.getMessage(), e);
+        } finally {
+            if (consumer != null) {
+                try {
+                    jmsConnectionFactory.closeConsumer(consumer);
+                } catch (JMSException e) {
+                    throw new JMSConnectorException("Error JMS Client poll consumer close. " + e.getMessage(), e);
+                }
+            }
+        }
+        return message;
     }
 
 

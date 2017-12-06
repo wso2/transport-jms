@@ -64,14 +64,14 @@ public class JMSServer {
      * @throws JMSException         JMS Exception.
      * @throws InterruptedException Interrupted exception while waiting in between messages.
      */
-    public void publishMessagesToQueue(String queueName) throws JMSException, InterruptedException {
+    public void publishMessagesToQueue(String queueName, int count) throws JMSException, InterruptedException {
         QueueConnection queueConn = (QueueConnection) connectionFactory.createConnection();
         queueConn.start();
         QueueSession queueSession = queueConn.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination destination = queueSession.createQueue(queueName);
         MessageProducer queueSender = queueSession.createProducer(destination);
         queueSender.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        for (int index = 0; index < 10; index++) {
+        for (int index = 0; index < count; index++) {
             String queueText = "Queue Message : " + (index + 1);
             TextMessage queueMessage = queueSession.createTextMessage(queueText);
             queueSender.send(queueMessage);

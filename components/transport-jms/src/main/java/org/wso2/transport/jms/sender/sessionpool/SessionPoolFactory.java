@@ -74,6 +74,8 @@ public class SessionPoolFactory extends BasePooledObjectFactory<SessionWrapper> 
                 connectionWrappers.add(connectionWrapper);
             }
 
+            connectionWrapper.getConnection().start();
+
             // Create new SessionWrapper (or XASessionWrapper) accordingly
             if (jmsConnectionFactory.isxATransacted()) {
                 XASession xASession = jmsConnectionFactory

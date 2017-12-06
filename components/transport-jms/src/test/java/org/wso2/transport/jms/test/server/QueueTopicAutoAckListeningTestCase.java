@@ -83,7 +83,7 @@ public class QueueTopicAutoAckListeningTestCase {
     public void queueListeningTestCase() throws JMSConnectorException, InterruptedException, JMSException {
         jmsQueueTransportListener.start();
         logger.info("JMS Transport Listener is starting to listen to the queue " + JMSTestConstants.QUEUE_NAME);
-        jmsServer.publishMessagesToQueue(JMSTestConstants.QUEUE_NAME);
+        jmsServer.publishMessagesToQueue(JMSTestConstants.QUEUE_NAME, 10);
         Assert.assertEquals(queueTestMessageProcessor.getCount(), 10,
                 "Expected message count is not received when " + "listening to queue " + JMSTestConstants.QUEUE_NAME);
         jmsQueueTransportListener.stop();

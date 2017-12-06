@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 import javax.naming.Context;
 
 /**
@@ -102,7 +101,7 @@ public class JMSConnectionFactoryManager {
         jmsConnectionFactory = new JMSClientConnectionFactory(properties, Boolean.TRUE);
 
         if (jmsConnectionFactory.isClientCaching()) {
-            connectionFactoryMap.put(UUID.randomUUID().toString(), jmsConnectionFactory);
+            connectionFactoryMap.put(jmsConnectionFactory.getFactoryId(), jmsConnectionFactory);
         }
         return jmsConnectionFactory;
     }
@@ -120,5 +119,14 @@ public class JMSConnectionFactoryManager {
         } else {
             return Boolean.TRUE;
         }
+    }
+
+    /**
+     * Remove given client connection factory from the Factories map.
+     *
+     * @param factoryId Id of the factory to be removed.
+     */
+    public void removeClientConnectionFactory(String factoryId) {
+        connectionFactoryMap.remove(factoryId);
     }
 }

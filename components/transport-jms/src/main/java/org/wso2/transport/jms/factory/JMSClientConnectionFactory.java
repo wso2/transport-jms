@@ -31,6 +31,7 @@ import org.wso2.transport.jms.utils.JMSConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 import javax.jms.Connection;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
@@ -46,6 +47,10 @@ public class JMSClientConnectionFactory extends JMSConnectionResourceFactory {
      * Default Wait timeout (in milliseconds) for the Session pool.
      */
     private static final int poolWaitTimeout = 30 * 1000;
+    /**
+     * ID tag for the ClientConnectionFactory
+     */
+    private String factoryId;
     /**
      * Default Size of the Connection list.
      */
@@ -101,6 +106,8 @@ public class JMSClientConnectionFactory extends JMSConnectionResourceFactory {
             connections = new ArrayList<>();
             initSessionPool();
         }
+
+        factoryId = UUID.randomUUID().toString();
     }
 
     public int getMaxNumberOfConnections() {
@@ -196,6 +203,7 @@ public class JMSClientConnectionFactory extends JMSConnectionResourceFactory {
                     throw new JMSConnectorException("Error closing the connection.", e);
                 }
             }
+            connections.clear();
         }
     }
 
@@ -220,6 +228,15 @@ public class JMSClientConnectionFactory extends JMSConnectionResourceFactory {
         XAConnection xaConnection = super.createXAConnection();
         xaConnection.setExceptionListener(new JMSErrorListener());
         return xaConnection;
+    }
+
+    /**
+     * Get ID of the factory.
+     *
+     * @return factory ID.
+     */
+    public String getFactoryId() {
+        return factoryId;
     }
 
     /**
