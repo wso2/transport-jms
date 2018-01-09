@@ -101,6 +101,13 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
     }
 
     @Override
+    @Deprecated
+    public Message poll(String destinationName, int timeout) throws JMSConnectorException {
+        // message selector is set to null
+        return poll(destinationName, timeout, null);
+    }
+
+    @Override
     public Message poll(String destinationName, int timeout, String messageSelector) throws JMSConnectorException {
         SessionWrapper sessionWrapper = null;
         Message message;
@@ -135,6 +142,14 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
             }
         }
         return message;
+    }
+
+    @Override
+    @Deprecated
+    public Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper)
+            throws JMSConnectorException {
+        // message selector is set to null
+        return pollTransacted(destinationName, timeout, sessionWrapper, null);
     }
 
     @Override

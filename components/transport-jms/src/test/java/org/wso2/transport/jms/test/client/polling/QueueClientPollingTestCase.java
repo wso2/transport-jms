@@ -44,6 +44,9 @@ import javax.jms.Message;
  */
 public class QueueClientPollingTestCase {
     private static final Logger logger = LoggerFactory.getLogger(QueueTopicAutoAckListeningTestCase.class);
+
+    private static final int timeout = 1000;
+
     private final String queueName = "pollingQueue";
 
     private JMSServer jmsServer;
@@ -95,7 +98,7 @@ public class QueueClientPollingTestCase {
 
         int receivedMsgCount = 0;
         for (int i = 0; i < 10; i++) {
-            Message message = jmsClientConnectorQueue.poll(queueName, 1000, null);
+            Message message = jmsClientConnectorQueue.poll(queueName, timeout, null);
             if (message != null) {
                 receivedMsgCount++;
             }

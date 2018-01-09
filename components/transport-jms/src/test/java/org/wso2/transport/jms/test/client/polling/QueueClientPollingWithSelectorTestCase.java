@@ -168,8 +168,6 @@ public class QueueClientPollingWithSelectorTestCase {
                 queueMessage.setJMSCorrelationID(correlationId);
                 producer.send(queueMessage);
             }
-        } catch (JMSException e) {
-            throw e;
         } finally {
             if (producer != null) {
                 producer.close();
