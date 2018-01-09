@@ -101,7 +101,7 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
     }
 
     @Override
-    public Message poll(String destinationName, int timeout) throws JMSConnectorException {
+    public Message poll(String destinationName, int timeout, String messageSelector) throws JMSConnectorException {
         SessionWrapper sessionWrapper = null;
         Message message;
         try {
@@ -112,7 +112,7 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
                     connection = jmsConnectionFactory.createConnection();
                     session = jmsConnectionFactory.createSession(connection);
                     connection.start();
-                    message = receiveMessage(session, destinationName, timeout);
+                    message = receiveMessage(session, destinationName, timeout, messageSelector);
                 } finally {
                     try {
                         jmsConnectionFactory.closeSession(session);
@@ -123,7 +123,7 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
                 }
             } else {
                 sessionWrapper = jmsConnectionFactory.getSessionWrapper();
-                message = receiveMessage(sessionWrapper.getSession(), destinationName, timeout);
+                message = receiveMessage(sessionWrapper.getSession(), destinationName, timeout, messageSelector);
             }
         } catch (JMSConnectorException e) {
             throw e;
@@ -138,9 +138,9 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
     }
 
     @Override
-    public Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper)
-            throws JMSConnectorException {
-        return receiveMessage(sessionWrapper.getSession(), destinationName, timeout);
+    public Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper,
+            String messageSelector) throws JMSConnectorException {
+        return receiveMessage(sessionWrapper.getSession(), destinationName, timeout, messageSelector);
     }
 
     @Override
@@ -301,10 +301,12 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
      * @param session JMS Session instance.
      * @param destinationName Name of the destination.
      * @param timeout blocking timeout value.
+     * @param messageSelector message selector string.
      * @return received JMS message (null if nothing returned).
      * @throws JMSConnectorException errors when creating consumer, receiving the message or releasing the resources.
      */
-    private Message receiveMessage(Session session, String destinationName, int timeout) throws JMSConnectorException {
+    private Message receiveMessage(Session session, String destinationName, int timeout, String messageSelector)
+            throws JMSConnectorException {
         MessageConsumer consumer = null;
         Message message;
         Destination queue = jmsConnectionFactory.createDestination(session, destinationName);
@@ -314,9 +316,18 @@ public class JMSClientConnectorImpl implements JMSClientConnector {
             // ClientCaching parameter will control whether we need to create new session and connection when using
             // JMS Client Connector
             if (JMSConstants.JMS_SPEC_VERSION_1_0.equals(jmsConnectionFactory.getJmsSpec())) {
-                consumer = ((QueueSession) session).createReceiver((Queue) queue);
+                if (messageSelector != null) {
+                    consumer = ((QueueSession) session).createReceiver((Queue) queue, messageSelector);
+                } else {
+                    consumer = ((QueueSession) session).createReceiver((Queue) queue);
+                }
             } else {
-                consumer = session.createConsumer(queue);
+                if (messageSelector != null) {
+                    consumer = session.createConsumer(queue, messageSelector);
+                } else {
+                    consumer = session.createConsumer(queue);
+                }
+
             }
             message = consumer.receive(timeout);
         } catch (JMSException e) {

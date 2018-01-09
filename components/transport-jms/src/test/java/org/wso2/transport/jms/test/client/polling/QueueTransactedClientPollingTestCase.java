@@ -96,11 +96,11 @@ public class QueueTransactedClientPollingTestCase {
         SessionWrapper sessionWrapper = jmsClientConnectorQueue.acquireSession();
 
         // poll and rollback
-        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper, null);
         sessionWrapper.getSession().rollback();
 
         // poll again
-        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper, null);
         sessionWrapper.getSession().rollback();
 
         Assert.assertNotNull(message, "JMSClientConnector transacted polling rollback failed");
@@ -124,11 +124,11 @@ public class QueueTransactedClientPollingTestCase {
         SessionWrapper sessionWrapper = jmsClientConnectorQueue.acquireSession();
 
         // poll and commit
-        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper, null);
         sessionWrapper.getSession().commit();
 
         // poll again
-        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper, null);
 
         Assert.assertNull(message, "JMSClientConnector transacted polling commit failed");
     }

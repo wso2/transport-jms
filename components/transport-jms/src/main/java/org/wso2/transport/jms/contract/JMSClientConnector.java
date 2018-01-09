@@ -46,12 +46,13 @@ public interface JMSClientConnector {
      *
      * @param destinationName Name of the destination.
      * @param timeout timeout value that will blocked for a message.
+     * @param messageSelector message selector filter, set null if no message selector is used.
      * @return Received Message from the broker (null if nothing received).
      * @throws JMSConnectorException errors when acquiring session, polling or closing resources.
      *
      * @since Transport-JMS 6.0.49.
      */
-    Message poll(String destinationName, int timeout) throws JMSConnectorException;
+    Message poll(String destinationName, int timeout, String messageSelector) throws JMSConnectorException;
 
     /**
      * Create a {@link Destination} instance using a {@link javax.jms.Session}.
@@ -100,12 +101,13 @@ public interface JMSClientConnector {
      * @param destinationName Name of the destination.
      * @param timeout timeout value that will blocked for a message.
      * @param sessionWrapper already acquired SessionWrapper instance.
+     * @param messageSelector message selector filter, set null if no message selector is used.
      * @return Received Message from the broker (null if nothing received).
      * @throws JMSConnectorException errors when polling or closing resources.
      *
      * @since Transport-JMS 6.0.49.
      */
-    Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper)
+    Message pollTransacted(String destinationName, int timeout, SessionWrapper sessionWrapper, String messageSelector)
             throws JMSConnectorException;
 
     /**

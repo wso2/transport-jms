@@ -97,7 +97,7 @@ public class QueueNonCachedClientPollingTestCase {
 
         int receivedMsgCount = 0;
         for (int i = 0; i < 10; i++) {
-            Message message = jmsClientConnectorQueue.poll(queueName, 1000);
+            Message message = jmsClientConnectorQueue.poll(queueName, 1000, null);
             if (message != null) {
                 receivedMsgCount++;
             }
