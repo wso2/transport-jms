@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -36,16 +36,18 @@ import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Map;
 import javax.jms.Connection;
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 
 /**
- * Test case for queue polling.
+ * Test case for queue polling with selectors.
  */
-public class QueueClientPollingTestCase {
+public class QueueClientPollingWithSelectorTestCase {
     private static final Logger logger = LoggerFactory.getLogger(QueueTopicAutoAckListeningTestCase.class);
-
-    private static final int timeout = 1000;
 
     private final String queueName = "pollingQueue";
 
@@ -55,7 +57,11 @@ public class QueueClientPollingTestCase {
 
     private JMSClientConnector jmsClientConnectorQueue;
 
-    private Connection connection = null;
+    private Connection connection;
+
+    private String correlationId1 = "12345abcd";
+
+    private String correlationId2 = "12345xyz";
 
     /**
      * Starts the JMS Server, and publish messages.
@@ -75,8 +81,10 @@ public class QueueClientPollingTestCase {
         connection = jmsServer.createConnection(null, null);
         connection.start();
 
-        //publish 10 messages to the queue
-        jmsServer.publishMessagesToQueue(queueName, 10);
+        //publish 10 messages to the queue with correlationId1
+        publishToQueue(correlationId1, 10);
+        //publish 5 messages to the queue with correlationId2
+        publishToQueue(correlationId2, 5);
 
         jmsClientConnectorQueue = new JMSConnectorFactoryImpl().createClientConnector(jmsClientParameters);
     }
@@ -91,24 +99,39 @@ public class QueueClientPollingTestCase {
      * @throws IllegalAccessException Error when accessing the private field.
      */
     @Test(groups = "jmsPolling",
-          description = "Queue Polling test case")
+          description = "Queue Polling with selectors test case")
     public void queuePollingTestCase()
             throws JMSConnectorException, NoSuchFieldException, IllegalAccessException, InterruptedException,
             JMSException {
 
-        int receivedMsgCount = 0;
-        for (int i = 0; i < 10; i++) {
-            Message message = jmsClientConnectorQueue.poll(queueName, timeout, null);
+        int receivedMsgCount1 = 0;
+        // this should receive 10 messages but loop will goon for two more iterations to see if any more messages comes
+        for (int i = 0; i < 12; i++) {
+            Message message = jmsClientConnectorQueue
+                    .poll(queueName, 500, "JMSCorrelationID = '" + correlationId1 + "'");
             if (message != null) {
-                receivedMsgCount++;
+                receivedMsgCount1++;
+            }
+        }
+
+        int receivedMsgCount2 = 0;
+        // this should receive 5 messages but loop will goon for two more iterations to see if any more messages comes
+        for (int i = 0; i < 7; i++) {
+            Message message = jmsClientConnectorQueue
+                    .poll(queueName, 500, "JMSCorrelationID = '" + correlationId2 + "'");
+            if (message != null) {
+                receivedMsgCount2++;
             }
         }
 
         JMSTestUtils.closeResources((JMSClientConnectorImpl) jmsClientConnectorQueue);
 
-        Assert.assertEquals(receivedMsgCount, 10,
-                "JMS Client polling receiver expected message count " + 10 + " , received message count "
-                        + receivedMsgCount);
+        Assert.assertEquals(receivedMsgCount1, 10,
+                "JMS Client selector polling receiver one expected message count " + 10 + " , received message count "
+                        + receivedMsgCount1);
+        Assert.assertEquals(receivedMsgCount2, 5,
+                "JMS Client selector polling receiver two expected message count " + 5 + " , received message count "
+                        + receivedMsgCount2);
     }
 
     @AfterClass(groups = "jmsPolling",
@@ -116,6 +139,45 @@ public class QueueClientPollingTestCase {
     public void cleanup() throws JMSException {
         if (connection != null) {
             connection.close();
+        }
+    }
+
+    /**
+     * Publish messages to a queue.
+     *
+     * @param correlationId correlationId of the message.
+     * @param count number of messages.
+     * @throws JMSException thrown if error in jms resource creation or publishing.
+     * @throws InterruptedException thrown if interruption while sleeping.
+     */
+    private void publishToQueue(String correlationId, int count) throws JMSException {
+        Connection connection = null;
+        Session session = null;
+        MessageProducer producer = null;
+        try {
+            connection = jmsServer.createConnection(null, null);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            producer = session.createProducer(session.createQueue(queueName));
+            producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+            logger.info("Publishing " + count + " messages to the queue: " + queueName);
+            for (int index = 0; index < count; index++) {
+                String queueText = "Queue Message : " + (index + 1);
+                TextMessage queueMessage = session.createTextMessage(queueText);
+                queueMessage.setJMSCorrelationID(correlationId);
+                producer.send(queueMessage);
+            }
+        } finally {
+            if (producer != null) {
+                producer.close();
+            }
+            if (session != null) {
+                session.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 }

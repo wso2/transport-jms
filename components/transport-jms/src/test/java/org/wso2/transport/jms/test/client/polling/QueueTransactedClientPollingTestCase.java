@@ -45,6 +45,9 @@ import javax.jms.Message;
  */
 public class QueueTransactedClientPollingTestCase {
     private static final Logger logger = LoggerFactory.getLogger(QueueTopicAutoAckListeningTestCase.class);
+
+    private static final int timeout = 1000;
+
     private final String queueName = "txPollingQueue";
 
     private JMSServer jmsServer;
@@ -54,6 +57,7 @@ public class QueueTransactedClientPollingTestCase {
     private JMSClientConnector jmsClientConnectorQueue;
 
     private Connection connection = null;
+
 
     /**
      * Starts the JMS Server, and publish messages.
@@ -96,11 +100,11 @@ public class QueueTransactedClientPollingTestCase {
         SessionWrapper sessionWrapper = jmsClientConnectorQueue.acquireSession();
 
         // poll and rollback
-        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        jmsClientConnectorQueue.pollTransacted(queueName, timeout, sessionWrapper, null);
         sessionWrapper.getSession().rollback();
 
         // poll again
-        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        Message message = jmsClientConnectorQueue.pollTransacted(queueName, timeout, sessionWrapper, null);
         sessionWrapper.getSession().rollback();
 
         Assert.assertNotNull(message, "JMSClientConnector transacted polling rollback failed");
@@ -124,11 +128,11 @@ public class QueueTransactedClientPollingTestCase {
         SessionWrapper sessionWrapper = jmsClientConnectorQueue.acquireSession();
 
         // poll and commit
-        jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        jmsClientConnectorQueue.pollTransacted(queueName, timeout, sessionWrapper, null);
         sessionWrapper.getSession().commit();
 
         // poll again
-        Message message = jmsClientConnectorQueue.pollTransacted(queueName, 1000, sessionWrapper);
+        Message message = jmsClientConnectorQueue.pollTransacted(queueName, timeout, sessionWrapper, null);
 
         Assert.assertNull(message, "JMSClientConnector transacted polling commit failed");
     }
