@@ -167,14 +167,16 @@ public class JMSServerConnectorImpl implements JMSServerConnector {
      */
     void closeAll() throws JMSConnectorException {
         JMSConnectorException exception = null;
-        for (JMSMessageConsumer messageConsumer : messageConsumers) {
-            try {
-                messageConsumer.closeAll();
-            } catch (JMSConnectorException e) {
-                if (exception == null) {
-                    exception = new JMSConnectorException("Error closing the consumers for service ", e);
-                } else {
-                    exception.addSuppressed(e);
+        if (null != messageConsumers) {
+            for (JMSMessageConsumer messageConsumer : messageConsumers) {
+                try {
+                    messageConsumer.closeAll();
+                } catch (JMSConnectorException e) {
+                    if (exception == null) {
+                        exception = new JMSConnectorException("Error closing the consumers for service ", e);
+                    } else {
+                        exception.addSuppressed(e);
+                    }
                 }
             }
         }
